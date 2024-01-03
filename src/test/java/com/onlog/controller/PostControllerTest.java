@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlog.domain.Post;
 import com.onlog.repository.PostRepository;
 import com.onlog.request.PostCreate;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -121,22 +125,27 @@ class PostControllerTest {
     @DisplayName("글 여러개 조회")
     @Test
     public void test5() throws Exception {
-        Post post1 = Post.builder()
-                .title("123451234512345")
-                .content("bar")
-                .build();
-        postRepository.save(post1);
+        Post post1 = postRepository.save(Post.builder()
+                .title("title1")
+                .content("content1")
+                .build());
 
-        Post post2 = Post.builder()
-                .title("123451234512345")
-                .content("bar")
-                .build();
-        postRepository.save(post2);
+        Post post2 = postRepository.save(Post.builder()
+                .title("title2")
+                .content("content2")
+                .build());
 
         // expected (when + then)
         mockMvc.perform(get("/posts")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.[0].id").value(post1.getId()))
+                .andExpect(jsonPath("$.[0].title").value("title1"))
+                .andExpect(jsonPath("$.[0].content").value("content1"))
+                .andExpect(jsonPath("$.[1].id").value(post2.getId()))
+                .andExpect(jsonPath("$.[1].title").value("title2"))
+                .andExpect(jsonPath("$.[1].content").value("content2"))
                 .andDo(print());
     }
 }
