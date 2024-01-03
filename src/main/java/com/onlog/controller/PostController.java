@@ -1,16 +1,15 @@
 package com.onlog.controller;
 
+import com.onlog.domain.Post;
 import com.onlog.request.PostCreate;
+import com.onlog.response.PostResponse;
 import com.onlog.serivce.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +32,17 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public Map<String, String> post(@RequestBody @Valid PostCreate request) throws Exception {
+    public void post(@RequestBody @Valid PostCreate request) throws Exception {
         postService.write(request);
-        return Map.of(); // map을 초기화 하는 메소드
     }
 
+    /*
+    * /posts -> 글 전체 조회(검색 + 페이징)
+    * /posts/{postId} -> 글 한개만 조회
+    * */
+    @GetMapping("/posts/{postId}")
+    public PostResponse get(@PathVariable(name = "postId") Long id) {
+
+        return postService.get(id);
+    }
 }
