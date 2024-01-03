@@ -26,7 +26,7 @@ public class PostController {
         // -> html rendering
     // SPA -> vue, react 와 같은
         // -> js + <-> API(JSON)
-    @GetMapping("/posts")
+    @GetMapping("/")
     public String get() {
         return "Hello world";
     }
@@ -42,7 +42,11 @@ public class PostController {
     * */
     @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable(name = "postId") Long id) {
-
         return postService.get(id);
+    }
+
+    @GetMapping("/posts")
+    public List<PostResponse> getList() {
+        return postService.getList();
     }
 }
