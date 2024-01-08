@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlog.domain.Post;
 import com.onlog.repository.PostRepository;
 import com.onlog.request.PostCreate;
-import com.onlog.response.PostResponse;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,12 +16,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.http.MediaType.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@WebMvcTest ->
 @SpringBootTest
@@ -129,7 +129,7 @@ class PostControllerTest {
     @Test
     public void test5() throws Exception {
         // given
-        List<Post> requestPosts = IntStream.range(1, 31)
+        List<Post> requestPosts = IntStream.range(0, 20)
                 .mapToObj(i -> Post.builder()
                         .title("제목 - " + i)
                         .content("반포자이 - " + i)
@@ -139,13 +139,13 @@ class PostControllerTest {
         postRepository.saveAll(requestPosts);
 
         // expected (when + then)
-        mockMvc.perform(get("/posts?page=1&sort=id,desc")
+        mockMvc.perform(get("/posts?page=1&size=10")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()",is(5)))
-                .andExpect(jsonPath("$[0].id").value(30))
-                .andExpect(jsonPath("$[0].title").value("제목 - 30"))
-                .andExpect(jsonPath("$[0].content").value("반포자이 - 30"))
+                .andExpect(jsonPath("$.length()",is(10)))
+                .andExpect(jsonPath("$[0].id").value(20))
+                .andExpect(jsonPath("$[0].title").value("제목 - 19"))
+                .andExpect(jsonPath("$[0].content").value("반포자이 - 19"))
                 .andDo(print());
     }
 }
