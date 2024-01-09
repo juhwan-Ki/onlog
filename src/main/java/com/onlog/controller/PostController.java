@@ -30,13 +30,10 @@ public class PostController {
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) throws Exception {
+        request.validate();
         postService.write(request);
     }
 
-    /*
-    * /posts -> 글 전체 조회(검색 + 페이징)
-    * /posts/{postId} -> 글 한개만 조회
-    * */
     @GetMapping("/posts/{postId}")
     public PostResponse get(@PathVariable(name = "postId") Long id) {
         return postService.get(id);

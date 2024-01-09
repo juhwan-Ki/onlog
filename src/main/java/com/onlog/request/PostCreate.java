@@ -1,5 +1,6 @@
 package com.onlog.request;
 
+import com.onlog.exception.InvalidRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -20,9 +21,10 @@ public class PostCreate {
         this.content = content;
     }
 
-    // 빌더의 장점
-    // - 가독성이 좋다.
-    // - 값 생성에 대한 유효함
-    // - 필요한 값만 받을 수 있다. (오버로딩 가능한 조건은?)
-    // - 객체 불변성
+    public void validate() {
+        if(title.contains("바보")) {
+            throw new InvalidRequest("title", "제목에 바보를 추가할 수 없습니다.");
+        }
+    }
+
 }
