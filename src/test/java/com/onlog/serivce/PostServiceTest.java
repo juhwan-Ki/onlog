@@ -3,6 +3,7 @@ package com.onlog.serivce;
 import com.onlog.domain.Post;
 import com.onlog.repository.PostRepository;
 import com.onlog.request.PostCreate;
+import com.onlog.request.PostEdit;
 import com.onlog.request.PostSearch;
 import com.onlog.response.PostResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -121,6 +122,31 @@ class PostServiceTest {
         // then
         assertEquals(10L, posts.size());
         assertEquals("제목 - 19", posts.get(0).getTitle());
+
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void tes5() {
+        // given
+        Post post = Post.builder()
+                        .title("제목입니다.")
+                        .content("내용입니다.")
+                        .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                        .title("수정제목입니다.")
+                        .build();
+        // when
+        postService.edit(post.getId(), postEdit);
+
+        // then
+        Post changePost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + post.getId()));
+        assertEquals("수정제목입니다.", changePost.getTitle());
+        assertEquals("내용입니다.", changePost.getContent());
 
     }
 }

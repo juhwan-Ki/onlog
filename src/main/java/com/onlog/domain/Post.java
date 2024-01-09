@@ -1,5 +1,6 @@
 package com.onlog.domain;
 
+import com.onlog.request.PostEdit;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +25,10 @@ public class Post {
         this.id = id;
         this.title = title;
         this.content = content;
+    }
+
+    public void change(PostEdit postEdit){
+        this.title = postEdit.getTitle() != null ? postEdit.getTitle() : this.title;
+        this.content = postEdit.getContent() != null ? postEdit.getContent() : this.content;
     }
 }

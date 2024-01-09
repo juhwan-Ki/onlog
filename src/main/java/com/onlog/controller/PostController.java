@@ -1,6 +1,7 @@
 package com.onlog.controller;
 
 import com.onlog.request.PostCreate;
+import com.onlog.request.PostEdit;
 import com.onlog.request.PostSearch;
 import com.onlog.response.PostResponse;
 import com.onlog.serivce.PostService;
@@ -44,5 +45,10 @@ public class PostController {
     @GetMapping("/posts")
     public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable(name = "postId") Long id, @RequestBody @Valid PostEdit request) {
+        postService.edit(id, request);
     }
 }

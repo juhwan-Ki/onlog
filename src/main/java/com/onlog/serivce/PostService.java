@@ -3,11 +3,13 @@ package com.onlog.serivce;
 import com.onlog.domain.Post;
 import com.onlog.repository.PostRepository;
 import com.onlog.request.PostCreate;
+import com.onlog.request.PostEdit;
 import com.onlog.request.PostSearch;
 import com.onlog.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,5 +43,13 @@ public class PostService {
         return postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void edit(Long id, PostEdit postEdit) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        post.change(postEdit);
     }
 }
