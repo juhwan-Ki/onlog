@@ -84,4 +84,3 @@ tasks.register('copyDocument', Copy) { // build/docs 문서를 resources에 복�
 build {
     dependsOn copyDocument
 }
-
