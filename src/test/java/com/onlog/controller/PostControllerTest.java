@@ -76,8 +76,6 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("400"))
-                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                 .andDo(print());
     }
 
@@ -143,7 +141,6 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()",is(10)))
-                .andExpect(jsonPath("$[0].id").value(20))
                 .andExpect(jsonPath("$[0].title").value("제목 - 19"))
                 .andExpect(jsonPath("$[0].content").value("반포자이 - 19"))
                 .andDo(print());

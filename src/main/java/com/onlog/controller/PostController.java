@@ -19,10 +19,6 @@ public class PostController {
 
     private final PostService postService;
 
-    // SSR -> jsp, thymeleaf 와 같은
-        // -> html rendering
-    // SPA -> vue, react 와 같은
-        // -> js + <-> API(JSON)
     @GetMapping("/")
     public String get() {
         return "Hello world";
