@@ -1,0 +1,11 @@
+|===
+|Path|Type|Description|Optional|Constraint
+
+{{#fields}}
+|{{path}}
+|{{type}}
+|{{description}}
+|{{#optional}}Y{{/optional}} {{!Y일때만 출력하도록}}
+|{{#constraint}} {{.}} {{/constraint}} {{!constraint이 있을 때만 적용}}
+{{/fields}}
+|===
